@@ -1,3 +1,5 @@
+package org.taskqbtr.lists.repository;
+
 /*
  * MIT License
  *
@@ -22,11 +24,10 @@
  * SOFTWARE.
  */
 
-package org.taskqbtr.lists.repository;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.taskqbtr.lists.common.util.DBCommandTransactionalExecutor;
 import org.taskqbtr.lists.model.List;
 
 import javax.persistence.EntityManager;
@@ -42,6 +43,7 @@ public class ListsRepositoryUTest {
     private EntityManagerFactory emf;
     private EntityManager em;
     private ListRepository listRepository;
+    private DBCommandTransactionalExecutor executor;
 
     @Before
     public void initTestCase() {
@@ -50,6 +52,8 @@ public class ListsRepositoryUTest {
 
         listRepository = new ListRepository();
         listRepository.em = em;
+
+        executor = new DBCommandTransactionalExecutor(em);
     }
 
     @After
@@ -60,20 +64,10 @@ public class ListsRepositoryUTest {
 
     @Test
     public void addListAndFindIt() {
-        Long listAddedId = null;
-        try {
-            em.getTransaction().begin();
+        // Lambda to execute
+        Long listAddedId = executor.executeCommand(() ->listRepository.addList(inbox()).getId());
 
-            listAddedId = listRepository.addList(inbox()).getId();
-
-            assertThat(listAddedId, is(notNullValue()));
-            em.getTransaction().commit();
-            em.clear();
-        } catch (final Exception e) {
-            fail("This Exceptions should not have been thrown!");
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        }
+        assertThat(listAddedId, is(notNullValue()));
 
         final List list = listRepository.findById(listAddedId);
         assertThat(list, is(notNullValue()));
