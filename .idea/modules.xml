@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/taskqbtr.iml" filepath="$PROJECT_DIR$/taskqbtr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/taskqbtrmodel/taskqbtrmodel.iml" filepath="$PROJECT_DIR$/taskqbtrmodel/taskqbtrmodel.iml" />
+    </modules>
+  </component>
+</project>
